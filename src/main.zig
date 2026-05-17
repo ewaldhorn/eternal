@@ -84,14 +84,33 @@ fn bounceOffWalls(ball: *Ball) void {
     }
 }
 
-fn checkTileCollision(ball: *Ball) void {
-    const col: usize = @intCast(@min(@divTrunc(@as(i32, @intFromFloat(ball.x)), TILE_SIZE), GRID_COLS - 1));
-    const row: usize = @intCast(@min(@divTrunc(@as(i32, @intFromFloat(ball.y)), TILE_SIZE), GRID_ROWS - 1));
-    const tile = grid[gridIdx(row, col)];
+fn tileAt(x: f32, y: f32) struct { col: usize, row: usize } {
+    const col: usize = @intCast(@min(@divTrunc(@as(i32, @intFromFloat(x)), TILE_SIZE), GRID_COLS - 1));
+    const row: usize = @intCast(@min(@divTrunc(@as(i32, @intFromFloat(y)), TILE_SIZE), GRID_ROWS - 1));
+    return .{ .col = col, .row = row };
+}
 
-    if (tile != 0 and tile != ball.team) {
-        // Enemy tile — convert to ball's colour and bounce
-        grid[gridIdx(row, col)] = ball.team;
+fn checkTileCollision(ball: *Ball) void {
+    // Check all 4 corners of the ball's bounding box, not just center
+    const r = BALL_RADIUS;
+    const corners = [_][2]f32{
+        .{ ball.x - r, ball.y - r },
+        .{ ball.x + r, ball.y - r },
+        .{ ball.x - r, ball.y + r },
+        .{ ball.x + r, ball.y + r },
+    };
+
+    var bounced = false;
+    for (corners) |corner| {
+        const pos = tileAt(corner[0], corner[1]);
+        const tile = grid[gridIdx(pos.row, pos.col)];
+        if (tile != 0 and tile != ball.team) {
+            grid[gridIdx(pos.row, pos.col)] = ball.team;
+            bounced = true;
+        }
+    }
+
+    if (bounced) {
         ball.vx = -ball.vx;
         ball.vy = -ball.vy;
     }
@@ -103,7 +122,7 @@ fn renderGrid() void {
             const team = grid[gridIdx(row, col)];
             if (team == 0) continue;
 
-            const colour: Colour = if (team == 1) Colour.day else Colour.night;
+            const colour: Colour = if (team == 1) Colour.day_dim else Colour.night_dim;
             const x: i32 = @intCast(col * TILE_SIZE);
             const y: i32 = @intCast(row * TILE_SIZE);
             Engine.fillRect(x, y, TILE_SIZE, TILE_SIZE, colour);
@@ -130,6 +149,6 @@ pub fn update(real_t: f32) void {
 
     // Render
     renderGrid();
-    Engine.fillCircle(@intFromFloat(ball_day.x), @intFromFloat(ball_day.y), BALL_RADIUS, Colour.white);
-    Engine.fillCircle(@intFromFloat(ball_night.x), @intFromFloat(ball_night.y), BALL_RADIUS, Colour.white);
+    Engine.fillCircle(@intFromFloat(ball_day.x), @intFromFloat(ball_day.y), BALL_RADIUS, ball_day.colour);
+    Engine.fillCircle(@intFromFloat(ball_night.x), @intFromFloat(ball_night.y), BALL_RADIUS, ball_night.colour);
 }
