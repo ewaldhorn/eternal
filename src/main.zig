@@ -130,6 +130,30 @@ fn renderGrid() void {
     }
 }
 
+pub fn flipTileAt(x: f32, y: f32) void {
+    const pos = tileAt(x, y);
+    const center_col: i32 = @intCast(pos.col);
+    const center_row: i32 = @intCast(pos.row);
+
+    // Flip a 3x3 area around the tapped point
+    for (0..3) |dr| {
+        for (0..3) |dc| {
+            const col: i32 = center_col + @as(i32, @intCast(dc)) - 1;
+            const row: i32 = center_row + @as(i32, @intCast(dr)) - 1;
+            if (col < 0 or col >= GRID_COLS or row < 0 or row >= GRID_ROWS) continue;
+
+            const ucol: usize = @intCast(col);
+            const urow: usize = @intCast(row);
+            const tile = grid[gridIdx(urow, ucol)];
+            if (tile == 1) {
+                grid[gridIdx(urow, ucol)] = 2;
+            } else if (tile == 2) {
+                grid[gridIdx(urow, ucol)] = 1;
+            }
+        }
+    }
+}
+
 pub fn update(real_t: f32) void {
     _ = real_t;
 

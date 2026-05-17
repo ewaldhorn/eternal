@@ -84,6 +84,34 @@ async function initApp() {
             requestAnimationFrame(renderLoop);
         }
 
+        function canvasCoords(clientX, clientY) {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = width / rect.width;
+            const scaleY = height / rect.height;
+            return {
+                x: (clientX - rect.left) * scaleX,
+                y: (clientY - rect.top) * scaleY,
+            };
+        }
+
+        canvas.addEventListener("click", (e) => {
+            const { x, y } = canvasCoords(e.clientX, e.clientY);
+            if (x >= 0 && x < width && y >= 0 && y < height) {
+                instance.exports.flip_tile(x, y);
+            }
+        });
+
+        canvas.addEventListener("touchstart", (e) => {
+            e.preventDefault();
+            for (let i = 0; i < e.touches.length; i++) {
+                const touch = e.touches[i];
+                const { x, y } = canvasCoords(touch.clientX, touch.clientY);
+                if (x >= 0 && x < width && y >= 0 && y < height) {
+                    instance.exports.flip_tile(x, y);
+                }
+            }
+        }, { passive: false });
+
         requestAnimationFrame(renderLoop);
 
     } catch (err) {
