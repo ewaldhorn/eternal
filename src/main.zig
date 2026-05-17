@@ -130,6 +130,6 @@ pub fn update(real_t: f32) void {
 
     // Render
     renderGrid();
-    Engine.fillCircle(@intFromFloat(ball_day.x), @intFromFloat(ball_day.y), BALL_RADIUS, ball_day.colour);
-    Engine.fillCircle(@intFromFloat(ball_night.x), @intFromFloat(ball_night.y), BALL_RADIUS, ball_night.colour);
+    Engine.fillCircle(@intFromFloat(ball_day.x), @intFromFloat(ball_day.y), BALL_RADIUS, Colour.white);
+    Engine.fillCircle(@intFromFloat(ball_night.x), @intFromFloat(ball_night.y), BALL_RADIUS, Colour.white);
 }
