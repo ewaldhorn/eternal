@@ -118,7 +118,7 @@ body {
     grid-template-columns: 1fr 320px;
     gap: 1.5rem;
     flex: 1;
-    min-height: 0; /* Important for grid scrolling */
+    min-height: 0;
 }
 
 /* Canvas Frame wrapper */
@@ -143,20 +143,6 @@ body {
     image-rendering: pixelated;
     image-rendering: crisp-edges;
 }
-
-/* Frame Corner Decorations */
-.frame-decorations .decor {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    border: 3px solid var(--accent-cyan);
-    z-index: 10;
-    pointer-events: none;
-}
-.decor.tl { top: 15px; left: 15px; border-right: none; border-bottom: none; }
-.decor.tr { top: 15px; right: 15px; border-left: none; border-bottom: none; }
-.decor.bl { bottom: 15px; left: 15px; border-right: none; border-top: none; }
-.decor.br { bottom: 15px; right: 15px; border-left: none; border-top: none; }
 
 /* Loading Spinner Overlay */
 .loading-overlay {
@@ -268,6 +254,7 @@ body {
 .text-cyan { color: var(--accent-cyan); }
 .text-green { color: #00ff66; }
 .text-yellow { color: #f1c40f; }
+.text-pink { color: var(--accent-pink); }
 
 /* Terminal/Console Output section */
 .console-output {

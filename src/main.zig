@@ -135,12 +135,25 @@ pub fn flipTileAt(x: f32, y: f32) void {
     const center_col: i32 = @intCast(pos.col);
     const center_row: i32 = @intCast(pos.row);
 
-    // Flip a 3x3 area around the tapped point
-    for (0..3) |dr| {
-        for (0..3) |dc| {
-            const col: i32 = center_col + @as(i32, @intCast(dc)) - 1;
-            const row: i32 = center_row + @as(i32, @intCast(dr)) - 1;
+    // Snap centre to the tapped tile's midpoint so the circle is always identical
+    const cx: f32 = @as(f32, @floatFromInt(pos.col)) * TILE_SIZE + TILE_SIZE / 2;
+    const cy: f32 = @as(f32, @floatFromInt(pos.row)) * TILE_SIZE + TILE_SIZE / 2;
+
+    const FLIP_RADIUS: f32 = @as(f32, @floatFromInt(TILE_SIZE)) * 2.5; // 50px
+    const FLIP_RADIUS_SQ: f32 = FLIP_RADIUS * FLIP_RADIUS;
+
+    // Check a 5x5 region, flip only tiles whose centre falls within the circle
+    for (0..5) |dr| {
+        for (0..5) |dc| {
+            const col: i32 = center_col + @as(i32, @intCast(dc)) - 2;
+            const row: i32 = center_row + @as(i32, @intCast(dr)) - 2;
             if (col < 0 or col >= GRID_COLS or row < 0 or row >= GRID_ROWS) continue;
+
+            const tile_cx: f32 = @as(f32, @floatFromInt(col)) * TILE_SIZE + TILE_SIZE / 2;
+            const tile_cy: f32 = @as(f32, @floatFromInt(row)) * TILE_SIZE + TILE_SIZE / 2;
+            const dx: f32 = tile_cx - cx;
+            const dy: f32 = tile_cy - cy;
+            if (dx * dx + dy * dy > FLIP_RADIUS_SQ) continue;
 
             const ucol: usize = @intCast(col);
             const urow: usize = @intCast(row);
