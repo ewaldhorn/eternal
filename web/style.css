@@ -21,35 +21,13 @@
 
 body {
     font-family: var(--font-sans);
-    background-color: var(--bg-color);
+    background: #08090f;
     color: var(--text-primary);
     height: 100vh;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    background: #08090f;
     position: relative;
-}
-
-/* Scanlines / Retro CRT Overlay */
-.scanlines {
-    display: none; /* Disabled to prevent Moiré shimmer and temporal beating */
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: linear-gradient(
-        to bottom,
-        rgba(255,255,255,0),
-        rgba(255,255,255,0) 50%,
-        rgba(0,0,0,0.15) 50%,
-        rgba(0,0,0,0.15)
-    );
-    background-size: 100% 4px;
-    z-index: 999;
-    pointer-events: none;
-    opacity: 0.5;
 }
 
 /* Global App Container */
@@ -96,14 +74,16 @@ body {
     font-weight: 800;
     letter-spacing: 2px;
     background: linear-gradient(90deg, #fff, #bbb);
+    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    color: transparent;
 }
 
 .logo-accent {
     color: var(--accent-cyan);
-    -webkit-text-fill-color: initial;
-    text-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
+    -webkit-text-fill-color: var(--accent-cyan);
+    text-shadow: 0 0 10px rgba(255, 180, 50, 0.5);
 }
 
 .system-status {
@@ -202,7 +182,7 @@ body {
 .spinner {
     width: 50px;
     height: 50px;
-    border: 3px solid rgba(0, 242, 254, 0.2);
+    border: 3px solid rgba(255, 180, 50, 0.2);
     border-top-color: var(--accent-cyan);
     border-radius: 50%;
     animation: spin 1s linear infinite;
@@ -330,7 +310,7 @@ body {
 
 .app-footer a:hover {
     color: var(--accent-cyan);
-    text-shadow: 0 0 8px rgba(0, 242, 254, 0.6);
+    text-shadow: 0 0 8px rgba(255, 180, 50, 0.6);
 }
 
 
@@ -342,7 +322,7 @@ body {
     background: transparent;
 }
 .console-output::-webkit-scrollbar-thumb {
-    background: rgba(0, 242, 254, 0.3);
+    background: rgba(255, 180, 50, 0.3);
     border-radius: 2px;
 }
 
